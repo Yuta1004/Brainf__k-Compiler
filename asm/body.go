@@ -11,7 +11,7 @@ func Body(programItemList *[]parse.ProgramItem) {
 	pointerPos := 0
 
 	for _, programItem := range *programItemList {
-		// +, -
+		// >, <
 		if programItem.Type == parse.ControlPointer {
 			fmt.Printf("		add rbx, %d\n", programItem.Value)
 			pointerPos += programItem.Value

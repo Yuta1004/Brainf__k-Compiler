@@ -12,10 +12,10 @@ func Parse(program string) *[]ProgramItem {
 	for idx := 0; idx < len(program); idx++ {
 		cs := program[idx]
 
-		// +, - (ポインタ位置をインクリメント/デクリメントする)
-		if cs == '+' || cs == '-' {
+		// >, < (ポインタ位置をインクリメント/デクリメントする)
+		if cs == '>' || cs == '<' {
 			conLen := common.GetContinueCharLen(program, idx)
-			if cs == '-' {
+			if cs == '<' {
 				conLen *= -1
 			}
 			programItem := ProgramItem{ControlPointer, conLen}
