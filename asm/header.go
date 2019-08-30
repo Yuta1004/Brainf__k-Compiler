@@ -10,4 +10,5 @@ func Header() {
 	fmt.Println(".global		_main")
 	fmt.Println()
 	fmt.Println("_main:")
+	fmt.Println("		mov rbx, 0")
 }
