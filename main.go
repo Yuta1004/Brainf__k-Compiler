@@ -16,7 +16,7 @@ func main() {
 	}
 	program := strings.Split(common.ReadFile(programFile), "\n")[0]
 
-	asm.Header()
+	asm.Header(0)
 	asm.Body(parse.Parse(program))
 	asm.Footer()
 }
