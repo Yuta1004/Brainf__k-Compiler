@@ -37,3 +37,29 @@ func checkMinusPointer(pointerPos int) {
 		common.Error("ポインタが負の値を取りました")
 	}
 }
+
+func checkLoopPair(programItemList *[]parse.ProgramItem) {
+	loopCount := 0
+	loopStack := make([]int, 0)
+
+	// [, ]を対応づけていく
+	for _, programItem := range *programItemList {
+		if programItem.Type == parse.LoopStart {
+			programItem.Value = loopCount
+			loopStack = append(loopStack, loopCount)
+			loopCount++
+		}
+		if programItem.Type == parse.LoopEnd {
+			if len(loopStack) == 0 {
+				common.Error("[, ]の対応が正しくありません")
+			}
+			loopStart := loopStack[len(loopStack)-1]
+			loopStack = loopStack[:len(loopStack)-1]
+			programItem.Value = loopStart
+		}
+	}
+
+	if len(loopStack) != 0 {
+		common.Error("[, ]の対応が正しくありません")
+	}
+}
