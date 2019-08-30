@@ -24,6 +24,18 @@ func Parse(program string) *[]ProgramItem {
 			continue
 		}
 
+		// +, - (ポインタが指す値をインクリメント/デクリメントする)
+		if cs == '+' || cs == '-' {
+			conLen := common.GetContinueCharLen(program, idx)
+			if cs == '-' {
+				conLen *= -1
+			}
+			programItem := ProgramItem{ControlValue, conLen}
+			programItemList = append(programItemList, programItem)
+			idx += int(math.Abs(float64(conLen))) - 1
+			continue
+		}
+
 		common.ErrorWithPos(program, "実装されていない文字です", idx)
 	}
 
