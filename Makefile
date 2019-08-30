@@ -1,7 +1,8 @@
 GCC = gcc
 GO = go
+PROGRAM = program.txt
 
-run:
-	$(GO) run main.go > bfc.S
+run: $(PROGRAM)
+	$(GO) run main.go $(PROGRAM) > bfc.S
 	$(GCC) -o bfc bfc.S
 	./bfc
