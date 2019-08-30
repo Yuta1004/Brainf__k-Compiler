@@ -14,7 +14,6 @@ func Body(programItemList *[]parse.ProgramItem) {
 	for _, programItem := range *checkLoopPair(programItemList) {
 		// >, <
 		if programItem.Type == parse.ControlPointer {
-			fmt.Printf("		add rbx, %d\n", programItem.Value)
 			pointerPos += programItem.Value
 			checkMinusPointer(pointerPos)
 			continue
@@ -50,6 +49,11 @@ func Body(programItemList *[]parse.ProgramItem) {
 
 		common.Error("不明なエラー")
 	}
+
+	// ポインタの値を返り値にする
+	fmt.Println("		mov rdx, rbp")
+	fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
+	fmt.Println("		movzx rax, byte ptr [rdx]")
 }
 
 func checkMinusPointer(pointerPos int) {
