@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"brainfOOk-compiler/asm"
 )
 
 func main() {
-	fmt.Println("BrainF**k Compiler")
+	asm.Header()
+	asm.Footer()
 }
