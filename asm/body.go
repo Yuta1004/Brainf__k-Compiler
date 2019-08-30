@@ -8,6 +8,7 @@ import (
 
 // Body : ProgramInfoListをアセンブリに変換して出力する
 func Body(programItemList *[]parse.ProgramItem) {
+	fmt.Println("body:")
 	pointerPos := 0
 
 	for _, programItem := range *programItemList {
