@@ -4,7 +4,7 @@ package common
 func GetContinueCharLen(base string, start int) int {
 	count := 0
 	target := base[start]
-	for base[start+count] == target {
+	for start+count < len(base) && base[start+count] == target {
 		count++
 	}
 	return count
