@@ -19,6 +19,14 @@ func Body(programItemList *[]parse.ProgramItem) {
 			continue
 		}
 
+		// +, -
+		if programItem.Type == parse.ControlValue {
+			fmt.Println("		mov rdx, rbp")
+			fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
+			fmt.Printf("		mov byte ptr [rdx], %d\n", programItem.Value)
+			continue
+		}
+
 		common.Error("不明なエラー")
 	}
 }
