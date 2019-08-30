@@ -44,6 +44,19 @@ func Parse(program string) (*[]ProgramItem, int) {
 			continue
 		}
 
+		// [, ] (ループ)
+		if cs == '[' || cs == ']' {
+			var itemType ItemType
+			if cs == '[' {
+				itemType = LoopStart
+			} else {
+				itemType = LoopEnd
+			}
+			programItem := ProgramItem{itemType, 0}
+			programItemList = append(programItemList, programItem)
+			continue
+		}
+
 		common.ErrorWithPos(program, "実装されていない文字です", idx)
 	}
 
