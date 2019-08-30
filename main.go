@@ -16,7 +16,9 @@ func main() {
 	}
 	program := strings.Split(common.ReadFile(programFile), "\n")[0]
 
-	asm.Header(0)
-	asm.Body(parse.Parse(program))
+	programItemList, allocMemoryNum := parse.Parse(program)
+
+	asm.Header(allocMemoryNum)
+	asm.Body(programItemList)
 	asm.Footer()
 }
