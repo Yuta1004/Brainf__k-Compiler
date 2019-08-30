@@ -2,6 +2,7 @@ package parse
 
 import (
 	"brainfOOk-compiler/common"
+	"math"
 )
 
 // Parse : プログラムを要素ごとに分解する
@@ -14,9 +15,12 @@ func Parse(program string) *[]ProgramItem {
 		// +, - (ポインタ位置をインクリメント/デクリメントする)
 		if cs == '+' || cs == '-' {
 			conLen := common.GetContinueCharLen(program, idx)
+			if cs == '-' {
+				conLen *= -1
+			}
 			programItem := ProgramItem{ControlPointer, conLen}
 			programItemList = append(programItemList, programItem)
-			idx += conLen - 1
+			idx += int(math.Abs(float64(conLen))) - 1
 			continue
 		}
 
