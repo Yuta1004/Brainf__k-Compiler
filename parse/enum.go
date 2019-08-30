@@ -8,4 +8,8 @@ const (
 	ControlPointer ItemType = iota
 	// ControlValue : +, -
 	ControlValue
+	// LoopStart : [
+	LoopStart
+	// LoopEnd : ]
+	LoopEnd
 )
