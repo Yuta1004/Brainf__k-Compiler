@@ -12,6 +12,6 @@ func Header(allocNum int) {
 	fmt.Println("_main:")
 	fmt.Println("		push rbp")
 	fmt.Println("		mov rbp, rsp")
-	fmt.Printf("		add rsp, %d\n", allocNum*8)
+	fmt.Printf("		sub rsp, %d\n", allocNum*8)
 	fmt.Println("		mov rbx, 0")
 }

@@ -47,5 +47,5 @@ func Parse(program string) (*[]ProgramItem, int) {
 		common.ErrorWithPos(program, "実装されていない文字です", idx)
 	}
 
-	return &programItemList, allocPointerNum
+	return &programItemList, allocPointerNum + 1
 }
