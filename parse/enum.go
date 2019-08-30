@@ -4,6 +4,8 @@ package parse
 type ItemType int
 
 const (
-	// ControlPointer : +, -
+	// ControlPointer : >, <
 	ControlPointer ItemType = iota
+	// ControlValue : +, -
+	ControlValue
 )
