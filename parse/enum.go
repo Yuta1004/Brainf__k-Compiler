@@ -14,4 +14,6 @@ const (
 	LoopEnd
 	// Write : .
 	Write
+	// Read : ,
+	Read
 )
