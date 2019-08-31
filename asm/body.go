@@ -49,11 +49,11 @@ func Body(programItemList *[]parse.ProgramItem) {
 
 		// .
 		if programItem.Type == parse.Write {
-			fmt.Println("		mov rsi, rbp")
-			fmt.Printf("		sub rsi, %d\n", pointerPos*8+8)
-			fmt.Println("		mov rax, 0x2000004")
-			fmt.Println("		mov rdi, 1")
-			fmt.Println("		mov rdx, 1")
+			fmt.Println("		mov rax, 0x2000004")           // Write
+			fmt.Println("		mov rdi, 1")                   // 第1引数 : flides
+			fmt.Println("		mov rsi, rbp")                 // 第2引数 : *buf
+			fmt.Printf("		sub rsi, %d\n", pointerPos*8+8) // (ポインタ設定)
+			fmt.Println("		mov rdx, 1")                   // 第3引数 : nbyte
 			fmt.Println("		syscall")
 			continue
 		}
