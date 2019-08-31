@@ -12,4 +12,6 @@ const (
 	LoopStart
 	// LoopEnd : ]
 	LoopEnd
+	// Write : .
+	Write
 )
