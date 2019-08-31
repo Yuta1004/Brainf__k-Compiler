@@ -57,8 +57,16 @@ func Parse(program string) (*[]ProgramItem, int) {
 			continue
 		}
 
+		// . (write)
 		if cs == '.' {
 			programItem := ProgramItem{Write, 0}
+			programItemList = append(programItemList, programItem)
+			continue
+		}
+
+		// . (Read)
+		if cs == ',' {
+			programItem := ProgramItem{Read, 0}
 			programItemList = append(programItemList, programItem)
 			continue
 		}

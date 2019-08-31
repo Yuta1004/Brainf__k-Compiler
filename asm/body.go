@@ -58,6 +58,17 @@ func Body(programItemList *[]parse.ProgramItem) {
 			continue
 		}
 
+		// ,
+		if programItem.Type == parse.Read {
+			fmt.Println("		mov rax, 0x2000003")
+			fmt.Println("		mov rdi, 1")
+			fmt.Println("		mov rsi, rbp")
+			fmt.Printf("		sub rsi, %d\n", pointerPos*8+8)
+			fmt.Println("		mov rdx, 1")
+			fmt.Println("		syscall")
+			continue
+		}
+
 		common.Error("不明なエラー")
 	}
 
