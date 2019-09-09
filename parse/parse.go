@@ -6,8 +6,8 @@ import (
 )
 
 // Parse : プログラムを要素ごとに分解する
-func Parse(program string) (*[]ProgramItem, int) {
-	programItemList := make([]ProgramItem, 0)
+func Parse(program string) (*ProgramItem, int) {
+	programItemTop := ProgramItem{-1, -1, nil}
 	pointerPos := 0
 	allocPointerNum := 0
 
@@ -21,8 +21,8 @@ func Parse(program string) (*[]ProgramItem, int) {
 			if cs == '<' {
 				conLen *= -1
 			}
-			programItem := ProgramItem{ControlPointer, conLen}
-			programItemList = append(programItemList, programItem)
+			programItem := ProgramItem{ControlPointer, conLen, &programItemTop}
+			programItemTop = programItem
 
 			// ポインタ, メモリチェック
 			idx += int(math.Abs(float64(conLen))) - 1
@@ -38,8 +38,8 @@ func Parse(program string) (*[]ProgramItem, int) {
 			if cs == '-' {
 				conLen *= -1
 			}
-			programItem := ProgramItem{ControlValue, conLen}
-			programItemList = append(programItemList, programItem)
+			programItem := ProgramItem{ControlValue, conLen, &programItemTop}
+			programItemTop = programItem
 			idx += int(math.Abs(float64(conLen))) - 1
 			continue
 		}
@@ -52,27 +52,27 @@ func Parse(program string) (*[]ProgramItem, int) {
 			} else {
 				itemType = LoopEnd
 			}
-			programItem := ProgramItem{itemType, 0}
-			programItemList = append(programItemList, programItem)
+			programItem := ProgramItem{itemType, 0, &programItemTop}
+			programItemTop = programItem
 			continue
 		}
 
 		// . (write)
 		if cs == '.' {
-			programItem := ProgramItem{Write, 0}
-			programItemList = append(programItemList, programItem)
+			programItem := ProgramItem{Write, 0, &programItemTop}
+			programItemTop = programItem
 			continue
 		}
 
 		// . (Read)
 		if cs == ',' {
-			programItem := ProgramItem{Read, 0}
-			programItemList = append(programItemList, programItem)
+			programItem := ProgramItem{Read, 0, &programItemTop}
+			programItemTop = programItem
 			continue
 		}
 
 		common.ErrorWithPos(program, "実装されていない文字です", idx)
 	}
 
-	return &programItemList, allocPointerNum + 1
+	return &programItemTop, allocPointerNum + 1
 }
