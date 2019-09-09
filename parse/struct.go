@@ -4,4 +4,5 @@ package parse
 type ProgramItem struct {
 	Type  ItemType
 	Value int
+	Next  *ProgramItem
 }
