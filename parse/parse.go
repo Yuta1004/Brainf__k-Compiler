@@ -2,12 +2,15 @@ package parse
 
 import (
 	"brainfOOk-compiler/common"
+	"fmt"
 	"math"
+	"os"
 )
 
 // Parse : プログラムを要素ごとに分解する
 func Parse(program string) (*ProgramItem, int) {
-	programItemTop := ProgramItem{-1, -1, nil}
+	programItemEnd := &ProgramItem{}
+	programItemTop := programItemEnd
 	pointerPos := 0
 	allocPointerNum := 0
 
@@ -21,8 +24,9 @@ func Parse(program string) (*ProgramItem, int) {
 			if cs == '<' {
 				conLen *= -1
 			}
-			programItem := ProgramItem{ControlPointer, conLen, &programItemTop}
-			programItemTop = programItem
+			programItem := ProgramItem{ControlPointer, conLen, nil}
+			programItemEnd.Next = &programItem
+			programItemEnd = &programItem
 
 			// ポインタ, メモリチェック
 			idx += int(math.Abs(float64(conLen))) - 1
@@ -38,8 +42,9 @@ func Parse(program string) (*ProgramItem, int) {
 			if cs == '-' {
 				conLen *= -1
 			}
-			programItem := ProgramItem{ControlValue, conLen, &programItemTop}
-			programItemTop = programItem
+			programItem := ProgramItem{ControlValue, conLen, nil}
+			programItemEnd.Next = &programItem
+			programItemEnd = &programItem
 			idx += int(math.Abs(float64(conLen))) - 1
 			continue
 		}
@@ -52,27 +57,33 @@ func Parse(program string) (*ProgramItem, int) {
 			} else {
 				itemType = LoopEnd
 			}
-			programItem := ProgramItem{itemType, 0, &programItemTop}
-			programItemTop = programItem
+			programItem := ProgramItem{itemType, 0, nil}
+			programItemEnd.Next = &programItem
+			programItemEnd = &programItem
 			continue
 		}
 
 		// . (write)
 		if cs == '.' {
-			programItem := ProgramItem{Write, 0, &programItemTop}
-			programItemTop = programItem
+			programItem := ProgramItem{Write, 0, nil}
+			programItemEnd.Next = &programItem
+			programItemEnd = &programItem
 			continue
 		}
 
 		// . (Read)
 		if cs == ',' {
-			programItem := ProgramItem{Read, 0, &programItemTop}
-			programItemTop = programItem
+			programItem := ProgramItem{Read, 0, nil}
+			programItemEnd.Next = &programItem
+			fmt.Fprintf(os.Stderr, "%v ", programItemTop)
+			programItemEnd = &programItem
+			fmt.Fprintf(os.Stderr, "%v\n", programItemTop)
 			continue
 		}
 
 		common.ErrorWithPos(program, "実装されていない文字です", idx)
 	}
 
-	return &programItemTop, allocPointerNum + 1
+	programItemEnd.Next = &ProgramItem{}
+	return programItemTop.Next, allocPointerNum + 1
 }
