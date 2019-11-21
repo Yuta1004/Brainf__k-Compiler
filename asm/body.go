@@ -25,9 +25,7 @@ func Body(programItemTop *parse.ProgramItem) {
 
 		// +, -
 		if programItem.Type == parse.ControlValue {
-			fmt.Println("		mov rdx, rbp")
-			fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
-			fmt.Printf("		add byte ptr [rdx], %d\n", programItem.Value)
+			fmt.Printf("		add byte ptr [rbp-%d], %d\n", pointerPos*8+8, programItem.Value)
 			programItem = programItem.Next
 			continue
 		}
@@ -36,9 +34,7 @@ func Body(programItemTop *parse.ProgramItem) {
 		if programItem.Type == parse.LoopStart {
 			loopStack = append(loopStack, loopCount)
 			loopCount++
-			fmt.Println("		mov rdx, rbp")
-			fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
-			fmt.Println("		cmp byte ptr [rdx], 0")
+			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8)
 			fmt.Printf("		je __loop_end_%d\n", loopCount-1)
 			fmt.Printf("__loop_start_%d:\n", loopCount-1)
 			programItem = programItem.Next
@@ -54,9 +50,7 @@ func Body(programItemTop *parse.ProgramItem) {
 			} else {
 				common.Error("[, ]の対応が正しくありません")
 			}
-			fmt.Println("		mov rdx, rbp")
-			fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
-			fmt.Println("		cmp byte ptr [rdx], 0")
+			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8+8)
 			fmt.Printf("		jne __loop_start_%d\n", loopID)
 			fmt.Printf("__loop_end_%d:\n", loopID)
 			programItem = programItem.Next
@@ -91,9 +85,7 @@ func Body(programItemTop *parse.ProgramItem) {
 	}
 
 	// ポインタの値を返り値にする
-	fmt.Println("		mov rdx, rbp")
-	fmt.Printf("		sub rdx, %d\n", pointerPos*8+8)
-	fmt.Println("		movzx rax, byte ptr [rdx]")
+	fmt.Printf("		movzx rax, byte ptr [rbp-%d]\n", pointerPos*8+8)
 }
 
 func checkMinusPointer(pointerPos int) {
