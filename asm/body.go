@@ -2,6 +2,7 @@ package asm
 
 import (
 	"brainfOOk-compiler/common"
+	c "brainfOOk-compiler/common"
 	"brainfOOk-compiler/parse"
 	"fmt"
 )
@@ -25,7 +26,7 @@ func Body(programItemTop *parse.ProgramItem) {
 
 		// +, -
 		if programItem.Type == parse.ControlValue {
-			fmt.Printf("		add byte ptr [rbp-%d], %d\n", pointerPos*8+8, programItem.Value)
+			c.PrintAsm("add byte ptr [rbp-%d], %d", pointerPos*8+8, programItem.Value)
 			programItem = programItem.Next
 			continue
 		}
@@ -34,9 +35,9 @@ func Body(programItemTop *parse.ProgramItem) {
 		if programItem.Type == parse.LoopStart {
 			loopStack = append(loopStack, loopCount)
 			loopCount++
-			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8)
-			fmt.Printf("		je .L__loop_end_%d\n", loopCount-1)
-			fmt.Printf(".L__loop_start_%d:\n", loopCount-1)
+			c.PrintAsm("cmp byte ptr [rbp-%d], 0", pointerPos*8)
+			c.PrintAsm("je .L__loop_end_%d", loopCount-1)
+			c.PrintLabel("loop_start_%d", loopCount-1)
 			programItem = programItem.Next
 			continue
 		}
@@ -50,33 +51,33 @@ func Body(programItemTop *parse.ProgramItem) {
 			} else {
 				common.Error("[, ]の対応が正しくありません")
 			}
-			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8+8)
-			fmt.Printf("		jne .L__loop_start_%d\n", loopID)
-			fmt.Printf(".L__loop_end_%d:\n", loopID)
+			c.PrintAsm("cmp byte ptr [rbp-%d], 0", pointerPos*8+8)
+			c.PrintAsm("jne .L__loop_start_%d", loopID)
+			c.PrintLabel("loop_end_%d", loopID)
 			programItem = programItem.Next
 			continue
 		}
 
 		// .
 		if programItem.Type == parse.Write {
-			fmt.Println("		mov rax, 0x2000004")           // Write
-			fmt.Println("		mov rdi, 1")                   // 第1引数 : flides
-			fmt.Println("		mov rsi, rbp")                 // 第2引数 : *buf
-			fmt.Printf("		sub rsi, %d\n", pointerPos*8+8) // (ポインタ設定)
-			fmt.Println("		mov rdx, 1")                   // 第3引数 : nbyte
-			fmt.Println("		syscall")
+			c.PrintAsm("mov rax, 0x2000004")          // Write
+			c.PrintAsm("mov rdi, 1")                  // 第1引数 : flides
+			c.PrintAsm("mov rsi, rbp")                // 第2引数 : *buf
+			c.PrintAsm("sub rsi, %d", pointerPos*8+8) // (ポインタ設定)
+			c.PrintAsm("mov rdx, 1")                  // 第3引数 : nbyte
+			c.PrintAsm("syscall")
 			programItem = programItem.Next
 			continue
 		}
 
 		// ,
 		if programItem.Type == parse.Read {
-			fmt.Println("		mov rax, 0x2000003")
-			fmt.Println("		mov rdi, 1")
-			fmt.Println("		mov rsi, rbp")
-			fmt.Printf("		sub rsi, %d\n", pointerPos*8+8)
-			fmt.Println("		mov rdx, 1")
-			fmt.Println("		syscall")
+			c.PrintAsm("mov rax, 0x2000003")
+			c.PrintAsm("mov rdi, 1")
+			c.PrintAsm("mov rsi, rbp")
+			c.PrintAsm("sub rsi, %d", pointerPos*8+8)
+			c.PrintAsm("mov rdx, 1")
+			c.PrintAsm("syscall")
 			programItem = programItem.Next
 			continue
 		}
@@ -85,7 +86,7 @@ func Body(programItemTop *parse.ProgramItem) {
 	}
 
 	// ポインタの値を返り値にする
-	fmt.Printf("		movzx rax, byte ptr [rbp-%d]\n", pointerPos*8+8)
+	c.PrintAsm("movzx rax, byte ptr [rbp-%d]", pointerPos*8+8)
 }
 
 func checkMinusPointer(pointerPos int) {
