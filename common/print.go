@@ -10,6 +10,8 @@ func PrintAsm(asm string, item ...interface{}) {
 	fmt.Println()
 }
 
-func PrintLabel(label string) {
-	fmt.Printf(".L__%s:\n", label)
+func PrintLabel(label string, item ...interface{}) {
+	fmt.Printf(".L__")
+	fmt.Printf(label, item...)
+	fmt.Println(":")
 }
