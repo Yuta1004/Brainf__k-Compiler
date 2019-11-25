@@ -35,8 +35,8 @@ func Body(programItemTop *parse.ProgramItem) {
 			loopStack = append(loopStack, loopCount)
 			loopCount++
 			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8)
-			fmt.Printf("		je __loop_end_%d\n", loopCount-1)
-			fmt.Printf("__loop_start_%d:\n", loopCount-1)
+			fmt.Printf("		je .L__loop_end_%d\n", loopCount-1)
+			fmt.Printf(".L__loop_start_%d:\n", loopCount-1)
 			programItem = programItem.Next
 			continue
 		}
@@ -51,8 +51,8 @@ func Body(programItemTop *parse.ProgramItem) {
 				common.Error("[, ]の対応が正しくありません")
 			}
 			fmt.Printf("		cmp byte ptr [rbp-%d], 0\n", pointerPos*8+8)
-			fmt.Printf("		jne __loop_start_%d\n", loopID)
-			fmt.Printf("__loop_end_%d:\n", loopID)
+			fmt.Printf("		jne .L__loop_start_%d\n", loopID)
+			fmt.Printf(".L__loop_end_%d:\n", loopID)
 			programItem = programItem.Next
 			continue
 		}
