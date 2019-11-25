@@ -1,6 +1,7 @@
 package asm
 
 import (
+	c "brainfOOk-compiler/common"
 	"fmt"
 )
 
@@ -8,7 +9,7 @@ import (
 func Footer() {
 	fmt.Println("")
 	fmt.Println("footer:")
-	fmt.Println("		mov rsp, rbp")
-	fmt.Println("		pop rbp")
-	fmt.Println("		ret")
+	c.PrintAsm("mov rsp, rbp")
+	c.PrintAsm("pop rbp")
+	c.PrintAsm("ret")
 }
